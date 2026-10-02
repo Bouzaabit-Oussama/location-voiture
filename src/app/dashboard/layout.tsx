@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/app/actions/auth";
 import { TenantProvider } from "@/components/providers/tenant-provider";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import { APP_VERSION } from "@/lib/version";
 
 export default async function DashboardLayout({
   children,
@@ -57,10 +58,13 @@ export default async function DashboardLayout({
             >
               FM
             </div>
-            <span className="text-lg font-bold text-white">
-              Fleet
-              <span style={{ color: "var(--color-accent-light)" }}>MA</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-white leading-tight">
+                Location
+                <span style={{ color: "var(--color-accent-light)" }}>Voiture</span>
+              </span>
+              <span className="text-[10px] text-gray-400 font-mono tracking-wider">v{APP_VERSION}</span>
+            </div>
           </div>
 
           {/* Nav Links */}
