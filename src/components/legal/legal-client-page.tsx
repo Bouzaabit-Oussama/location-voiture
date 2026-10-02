@@ -172,13 +172,25 @@ export function LegalClientPage({ initialInfractions = [], vehicles = [] }: { in
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right">
-                    <button 
-                      disabled={!infraction.client}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                    >
-                      <FileText className="h-4 w-4" />
-                      Générer PDF DGSN
-                    </button>
+                    {infraction.client ? (
+                      <a 
+                        href={`/print/infraction/${infraction.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm"
+                      >
+                        <FileText className="h-4 w-4" />
+                        Générer PDF DGSN
+                      </a>
+                    ) : (
+                      <button 
+                        disabled
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                      >
+                        <FileText className="h-4 w-4" />
+                        Générer PDF DGSN
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
