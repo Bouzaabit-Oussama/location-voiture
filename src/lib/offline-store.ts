@@ -14,7 +14,7 @@ export interface OfflineSyncItem<T> {
   lastError?: string;
 }
 
-export class FleetMADatabase extends Dexie {
+export class Location VoitureDatabase extends Dexie {
   // Sync queue for offline mutations
   syncQueue!: Table<OfflineSyncItem<any>, string>;
 
@@ -23,7 +23,7 @@ export class FleetMADatabase extends Dexie {
   cachedBookings!: Table<any, string>;
 
   constructor() {
-    super("FleetMADatabase");
+    super("Location VoitureDatabase");
     this.version(1).stores({
       syncQueue: "id, type, action, status, createdAt",
       cachedVehicles: "id, plate_number, status",
@@ -32,7 +32,7 @@ export class FleetMADatabase extends Dexie {
   }
 }
 
-export const db = new FleetMADatabase();
+export const db = new Location VoitureDatabase();
 
 /**
  * Queue an item for background sync.
@@ -58,7 +58,7 @@ export async function queueForSync<T>(
     try {
       const registration = await navigator.serviceWorker.ready;
       // @ts-ignore - TS doesn't know about sync yet
-      await registration.sync.register("fleetma-sync");
+      await registration.sync.register("location-voiture-sync");
     } catch (err) {
       console.warn("Background sync registration failed:", err);
       // Fallback to manual sync trigger here if needed

@@ -1,5 +1,5 @@
 -- ============================================
--- FleetMA — Migration 001: Extensions & Foundation
+-- Location Voiture — Migration 001: Extensions & Foundation
 -- Milestone: MA (Tenant Isolation)
 -- ============================================
 

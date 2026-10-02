@@ -179,7 +179,7 @@ export default function HomePage() {
                 Prêt à digitaliser votre agence ?
               </h2>
               <p className="text-blue-200 mb-8 max-w-lg mx-auto">
-                Rejoignez les agences de location marocaines qui font confiance à FleetMA.
+                Rejoignez les agences de location marocaines qui font confiance à Location Voiture.
                 Aucune carte de crédit requise.
               </p>
               <Link
@@ -205,7 +205,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              © 2026 FleetMA. Tous droits réservés.
+              © 2026 Location Voiture. Tous droits réservés.
             </p>
             <div className="flex gap-6">
               <a href="#" className="text-sm" style={{ color: "var(--color-text-muted)" }}>

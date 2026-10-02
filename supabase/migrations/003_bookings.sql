@@ -1,5 +1,5 @@
 -- ============================================
--- FleetMA — Migration 003: Clients, Bookings & Seasonality
+-- Location Voiture — Migration 003: Clients, Bookings & Seasonality
 -- Milestone: MC (Booking Engine)
 -- ============================================
 

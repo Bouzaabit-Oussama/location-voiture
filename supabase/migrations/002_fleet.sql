@@ -1,5 +1,5 @@
 -- ============================================
--- FleetMA — Migration 002: Fleet & Vehicles
+-- Location Voiture — Migration 002: Fleet & Vehicles
 -- Milestone: MB (Fleet Management)
 -- ============================================
 

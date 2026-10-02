@@ -51,13 +51,13 @@ export function TenantProvider({
     setLocaleState(newLocale);
     // Persist preference
     if (typeof window !== "undefined") {
-      localStorage.setItem("fleetma_locale", newLocale);
+      localStorage.setItem("location-voiture_locale", newLocale);
     }
   }, []);
 
   // Apply RTL/LTR to html element dynamically
   useEffect(() => {
-    const savedLocale = localStorage.getItem("fleetma_locale") as "fr" | "ar" | null;
+    const savedLocale = localStorage.getItem("location-voiture_locale") as "fr" | "ar" | null;
     if (savedLocale) {
       setLocaleState(savedLocale);
     }

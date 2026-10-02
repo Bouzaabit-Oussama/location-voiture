@@ -1,5 +1,5 @@
 /* ============================================
-   FleetMA — Database Type Definitions
+   Location Voiture — Database Type Definitions
    Auto-generated types will be placed here once
    Supabase CLI is connected. For now, these are
    the manually maintained domain types.

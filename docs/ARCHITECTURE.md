@@ -1,4 +1,4 @@
-# FleetMA — Architecture Document
+# Location Voiture — Architecture Document
 ## Multi-Tenant Vehicle Rental SaaS for the Moroccan Market
 
 ### Version: 0.1.0
@@ -8,7 +8,7 @@
 
 ## 1. System Overview
 
-FleetMA is a production-grade, multi-tenant SaaS platform for vehicle rental businesses operating in Morocco. It provides fleet management, booking engines, legal compliance tooling, and offline inspection capabilities.
+Location Voiture is a production-grade, multi-tenant SaaS platform for vehicle rental businesses operating in Morocco. It provides fleet management, booking engines, legal compliance tooling, and offline inspection capabilities.
 
 ## 2. Tech Stack
 

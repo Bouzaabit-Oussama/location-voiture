@@ -35,7 +35,7 @@ export default function LoginPage() {
             className="text-2xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
-            Bienvenue sur FleetMA
+            Bienvenue sur Location Voiture
           </h1>
           <p
             className="text-sm mt-1"

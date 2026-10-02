@@ -116,7 +116,7 @@ export function InspectionsClientPage({
                 if (isOnline && "serviceWorker" in navigator) {
                   navigator.serviceWorker.ready.then(reg => {
                     // @ts-ignore
-                    reg.sync.register("fleetma-sync");
+                    reg.sync.register("location-voiture-sync");
                   });
                 }
               }}

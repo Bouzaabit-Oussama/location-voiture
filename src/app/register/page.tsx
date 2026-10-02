@@ -76,7 +76,7 @@ export default function RegisterPage() {
             className="text-sm mt-1"
             style={{ color: "var(--color-text-muted)" }}
           >
-            Inscrivez votre agence de location sur FleetMA
+            Inscrivez votre agence de location sur Location Voiture
           </p>
         </div>
 

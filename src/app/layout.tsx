@@ -3,8 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "FleetMA — Location de Voitures au Maroc",
-    template: "%s | FleetMA",
+    default: "Location Voiture — Location de Voitures au Maroc",
+    template: "%s | Location Voiture",
   },
   description:
     "Plateforme SaaS de gestion de location de voitures au Maroc. Gestion de flotte, réservations, inspections et conformité CNDP.",
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
     "fleet management",
     "تأجير السيارات المغرب",
   ],
-  authors: [{ name: "FleetMA" }],
+  authors: [{ name: "Location Voiture" }],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "FleetMA",
+    title: "Location Voiture",
   },
 };
 

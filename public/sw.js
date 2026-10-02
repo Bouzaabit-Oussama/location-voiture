@@ -1,4 +1,4 @@
-const CACHE_NAME = "fleetma-cache-v1";
+const CACHE_NAME = "location-voiture-cache-v1";
 const OFFLINE_URL = "/_not-found";
 
 // Install event: cache static assets
@@ -69,7 +69,7 @@ self.addEventListener("fetch", (event) => {
 
 // Background Sync event
 self.addEventListener("sync", (event) => {
-  if (event.tag === "fleetma-sync") {
+  if (event.tag === "location-voiture-sync") {
     console.log("Background sync triggered!");
     event.waitUntil(processSyncQueue());
   }

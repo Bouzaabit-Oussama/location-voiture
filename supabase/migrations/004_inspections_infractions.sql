@@ -1,5 +1,5 @@
 -- ============================================
--- FleetMA — Migration 004: Inspections & Infractions
+-- Location Voiture — Migration 004: Inspections & Infractions
 -- Milestones: MD (Inspections) + ME (Legal Suite)
 -- ============================================
 
