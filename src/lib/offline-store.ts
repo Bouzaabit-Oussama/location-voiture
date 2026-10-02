@@ -14,7 +14,7 @@ export interface OfflineSyncItem<T> {
   lastError?: string;
 }
 
-export class Location VoitureDatabase extends Dexie {
+export class LocationVoitureDatabase extends Dexie {
   // Sync queue for offline mutations
   syncQueue!: Table<OfflineSyncItem<any>, string>;
 
@@ -23,7 +23,7 @@ export class Location VoitureDatabase extends Dexie {
   cachedBookings!: Table<any, string>;
 
   constructor() {
-    super("Location VoitureDatabase");
+    super("LocationVoitureDatabase");
     this.version(1).stores({
       syncQueue: "id, type, action, status, createdAt",
       cachedVehicles: "id, plate_number, status",
@@ -32,7 +32,7 @@ export class Location VoitureDatabase extends Dexie {
   }
 }
 
-export const db = new Location VoitureDatabase();
+export const db = new LocationVoitureDatabase();
 
 /**
  * Queue an item for background sync.
