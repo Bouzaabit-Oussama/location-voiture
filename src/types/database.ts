@@ -41,6 +41,10 @@ export interface Tenant {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  subscription_status?: 'trial' | 'active' | 'past_due' | 'canceled' | 'unpaid';
+  trial_ends_at?: string;
+  max_vehicles?: number;
+  is_superadmin?: boolean;
 }
 
 export interface UserProfile {
@@ -153,16 +157,17 @@ export interface Infraction {
   id: string;
   tenant_id: string;
   vehicle_id: string;
-  booking_id: string | null;      // null = unmatched
+  booking_id: string | null;
   client_id: string | null;
-  type: "speeding" | "parking" | "red_light" | "other";
-  source: "narsa" | "dgsn" | "manual";
-  infraction_datetime: string;
-  fine_amount_mad: number;
+  infraction_date: string;
+  infraction_type: "speeding" | "parking" | "red_light" | "accident" | "other";
+  amount_mad: number | null;
   location: string;
-  liability_transferred: boolean;
-  transfer_document_url: string | null;
+  radar_reference: string | null;
+  status: "pending" | "client_billed" | "dgsn_transferred" | "resolved";
+  notes: string | null;
   created_at: string;
+  updated_at: string;
 }
 
 export interface SeasonRate {
