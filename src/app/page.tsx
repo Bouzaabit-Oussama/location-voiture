@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { APP_VERSION } from "@/lib/version";
 
 export default function HomePage() {
   return (
@@ -12,11 +13,14 @@ export default function HomePage() {
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
                 style={{ background: "linear-gradient(135deg, var(--color-primary), var(--color-accent))" }}
               >
-                FM
+                LV
               </div>
-              <span className="text-xl font-bold" style={{ color: "var(--color-text)" }}>
-                Fleet<span style={{ color: "var(--color-primary)" }}>MA</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold leading-tight" style={{ color: "var(--color-text)" }}>
+                  Location<span style={{ color: "var(--color-primary)" }}>Voiture</span>
+                </span>
+                <span className="text-[10px] text-gray-500 font-mono tracking-wider -mt-1">v{APP_VERSION}</span>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <Link
