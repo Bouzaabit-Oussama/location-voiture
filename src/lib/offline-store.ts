@@ -1,7 +1,7 @@
 import Dexie, { type Table } from "dexie";
-import type { Database } from "@/types/database";
+import type { Inspection } from "@/types/database";
 
-type InspectionInsert = Database["public"]["Tables"]["inspections"]["Insert"];
+type InspectionInsert = Partial<Inspection>;
 
 export interface OfflineSyncItem<T> {
   id: string; // local UUID
