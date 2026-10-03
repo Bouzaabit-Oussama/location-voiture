@@ -76,34 +76,39 @@ CREATE POLICY "tenant_members_read" ON tenants
 -- ============================================
 ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "users_read_own_tenant" ON user_profiles
+-- Helper functions with SECURITY DEFINER to prevent policy recursion
+CREATE OR REPLACE FUNCTION get_auth_tenant_id()
+RETURNS UUID AS $$
+  SELECT tenant_id FROM user_profiles WHERE id = auth.uid();
+$$ LANGUAGE sql SECURITY DEFINER STABLE;
+
+CREATE OR REPLACE FUNCTION get_auth_user_role()
+RETURNS TEXT AS $$
+  SELECT role FROM user_profiles WHERE id = auth.uid();
+$$ LANGUAGE sql SECURITY DEFINER STABLE;
+
+CREATE POLICY "users_read_own_profile" ON user_profiles
   FOR SELECT
-  USING (
-    tenant_id = (
-      SELECT tenant_id FROM user_profiles AS up
-      WHERE up.id = auth.uid()
-    )
-  );
+  USING (id = auth.uid());
 
-CREATE POLICY "admins_manage_own_tenant" ON user_profiles
+CREATE POLICY "users_update_own_profile" ON user_profiles
+  FOR UPDATE
+  USING (id = auth.uid());
+
+CREATE POLICY "users_read_tenant_members" ON user_profiles
+  FOR SELECT
+  USING (tenant_id = get_auth_tenant_id());
+
+CREATE POLICY "admins_manage_tenant_members" ON user_profiles
   FOR ALL
   USING (
-    tenant_id = (
-      SELECT tenant_id FROM user_profiles AS up
-      WHERE up.id = auth.uid()
-      AND up.role IN ('admin', 'manager')
-    )
+    tenant_id = get_auth_tenant_id() 
+    AND get_auth_user_role() IN ('admin', 'manager', 'superadmin')
   );
 
-CREATE POLICY "superadmin_full_access_profiles" ON user_profiles
+CREATE POLICY "superadmins_manage_all_profiles" ON user_profiles
   FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM user_profiles AS up
-      WHERE up.id = auth.uid()
-      AND up.role = 'superadmin'
-    )
-  );
+  USING (is_superadmin());
 
 -- ============================================
 -- UPDATED_AT TRIGGER FUNCTION
