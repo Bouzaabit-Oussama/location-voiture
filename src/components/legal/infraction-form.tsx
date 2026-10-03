@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { createInfraction } from "@/app/actions/infractions";
+import { createAndMapInfraction } from "@/app/actions/infractions";
 import { Scale, Loader2 } from "lucide-react";
 
 export function InfractionForm({ 
@@ -28,10 +28,11 @@ export function InfractionForm({
     // HTML datetime-local inputs return "YYYY-MM-DDTHH:mm"
     const dateStr = formData.get("infraction_date") as string;
     
-    const result = await createInfraction({
+    const infraction_type = formData.get("infraction_type") as "speeding" | "parking" | "red_light" | "accident" | "other" | undefined;
+    const result = await createAndMapInfraction({
       vehicle_id: formData.get("vehicle_id") as string,
       infraction_date: new Date(dateStr).toISOString(),
-      infraction_type: formData.get("infraction_type") as string,
+      infraction_type: infraction_type,
       amount_mad: Number(formData.get("amount_mad")),
       location: formData.get("location") as string,
       radar_reference: formData.get("radar_reference") as string || undefined,
