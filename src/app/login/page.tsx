@@ -28,7 +28,7 @@ export default function LoginPage() {
                   "linear-gradient(135deg, var(--color-primary), var(--color-accent))",
               }}
             >
-              FM
+              LV
             </div>
           </Link>
           <h1

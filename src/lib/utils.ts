@@ -52,7 +52,7 @@ export function isValidICE(ice: string): boolean {
   return /^\d{15}$/.test(ice.trim());
 }
 
-/** Generate a booking reference (e.g., FMA-2026-A3X9K) */
+/** Generate a booking reference (e.g., LV-2026-A3X9K) */
 export function generateBookingRef(): string {
   const year = new Date().getFullYear();
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -60,5 +60,5 @@ export function generateBookingRef(): string {
   for (let i = 0; i < 5; i++) {
     code += chars[Math.floor(Math.random() * chars.length)];
   }
-  return `FMA-${year}-${code}`;
+  return `LV-${year}-${code}`;
 }

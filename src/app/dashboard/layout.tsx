@@ -56,7 +56,7 @@ export default async function DashboardLayout({
                   "linear-gradient(135deg, var(--color-primary-light), var(--color-accent))",
               }}
             >
-              FM
+              LV
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-bold text-white leading-tight">

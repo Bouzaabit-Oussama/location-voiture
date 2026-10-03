@@ -12,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   // Fetch the user's profile and tenant to check if they are a superadmin
   const { data: profile } = await supabase
-    .from('profiles')
+    .from('user_profiles')
     .select('tenant_id')
     .eq('id', session.user.id)
     .single();

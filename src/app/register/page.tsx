@@ -63,7 +63,7 @@ export default function RegisterPage() {
                   "linear-gradient(135deg, var(--color-primary), var(--color-accent))",
               }}
             >
-              FM
+              LV
             </div>
           </Link>
           <h1
