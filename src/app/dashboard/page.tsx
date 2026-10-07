@@ -150,7 +150,7 @@ export default function DashboardPage() {
           className={buttonVariants({
             size: "sm",
             className:
-              "bg-[#3b82f6] hover:bg-[#2563eb] text-white font-medium rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.3),0_0_0_1px_rgba(59,130,246,0.5)] active:scale-[0.98] transition-all h-10 px-5",
+              "bg-[#fafafa] hover:bg-white text-black font-semibold rounded-xl shadow-sm active:scale-[0.98] transition-all h-10 px-5",
           })}
         >
           <Plus className="w-4 h-4 mr-2" />
