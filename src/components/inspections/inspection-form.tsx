@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { queueForSync } from "@/lib/offline-store";
 import { createInspection } from "@/app/actions/inspections";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface InspectionFormProps {
   vehicles: any[];
@@ -143,112 +146,107 @@ export function InspectionForm({ vehicles, bookings, onComplete, onCancel }: Ins
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {!isOnline && (
-        <div
-          className="p-3 rounded-lg text-sm"
-          style={{ background: "rgba(217, 119, 6, 0.1)", color: "var(--color-warning)", border: "1px solid var(--color-warning)" }}
-        >
-          ⚠️ Mode hors ligne : L&apos;inspection sera sauvegardée localement et synchronisée plus tard.
+        <div className="p-4 rounded-xl text-sm bg-[#f59e0b]/10 border border-[#f59e0b]/20 text-[#f59e0b] font-medium flex items-center gap-2">
+          <span className="shrink-0">⚠️</span> Mode hors ligne : L'inspection sera sauvegardée localement et synchronisée plus tard.
         </div>
       )}
 
       {error && (
-        <div className="p-3 rounded-lg text-sm" style={{ background: "var(--color-danger)", color: "white" }}>
-          {error}
+        <div className="p-4 rounded-xl text-sm bg-[#ef4444]/10 border border-[#ef4444]/20 text-[#ef4444] font-medium flex items-center gap-2">
+           <span className="shrink-0">⚠️</span> {error}
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold text-[#a1a1aa]">
             Réservation *
-          </label>
+          </Label>
           <select
             value={bookingId}
             onChange={(e) => setBookingId(e.target.value)}
-            className="input"
+            className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none"
             required
           >
-            <option value="">Sélectionner une réservation...</option>
+            <option value="" className="bg-[#131316]">Sélectionner une réservation...</option>
             {bookings.map((b) => (
-              <option key={b.id} value={b.id}>
+              <option key={b.id} value={b.id} className="bg-[#131316]">
                 {b.booking_ref} - {b.client?.full_name}
               </option>
             ))}
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-            Type d&apos;inspection *
-          </label>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold text-[#a1a1aa]">
+            Type d'inspection *
+          </Label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value as "check_in" | "check_out")}
-            className="input"
+            className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none"
             required
           >
-            <option value="check_in">Départ (Check-in)</option>
-            <option value="check_out">Retour (Check-out)</option>
+            <option value="check_in" className="bg-[#131316]">Départ (Check-in)</option>
+            <option value="check_out" className="bg-[#131316]">Retour (Check-out)</option>
           </select>
         </div>
       </div>
 
       {selectedVehicle && (
-        <div className="p-4 rounded-lg" style={{ background: "var(--color-bg)", border: "1px solid var(--color-border)" }}>
-          <h4 className="font-semibold text-sm mb-2" style={{ color: "var(--color-text)" }}>
-            Véhicule
+        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+          <h4 className="font-semibold text-xs uppercase tracking-wider text-[#71717a] mb-1">
+            Véhicule sélectionné
           </h4>
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-            {selectedVehicle.brand} {selectedVehicle.model} ({selectedVehicle.plate_number})
+          <p className="text-sm font-medium text-[#fafafa]">
+            {selectedVehicle.brand} {selectedVehicle.model} <span className="text-[#a1a1aa] font-normal ml-1">({selectedVehicle.plate_number})</span>
           </p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold text-[#a1a1aa]">
             Kilométrage actuel (km) *
-          </label>
-          <input
+          </Label>
+          <Input
             type="number"
             value={mileage}
             onChange={(e) => setMileage(e.target.value)}
-            className="input"
             placeholder={selectedVehicle?.mileage_km?.toString() || "0"}
             required
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold text-[#a1a1aa]">
             Propreté
-          </label>
+          </Label>
           <select
             value={cleanliness}
             onChange={(e) => setCleanliness(e.target.value as "clean" | "average" | "dirty")}
-            className="input"
+            className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none"
           >
-            <option value="clean">Propre</option>
-            <option value="average">Moyen</option>
-            <option value="dirty">Sale</option>
+            <option value="clean" className="bg-[#131316]">Propre</option>
+            <option value="average" className="bg-[#131316]">Moyen</option>
+            <option value="dirty" className="bg-[#131316]">Sale</option>
           </select>
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2" style={{ color: "var(--color-text)" }}>
+      <div className="space-y-3">
+        <Label className="text-xs font-semibold text-[#a1a1aa]">
           Niveau de carburant ({fuelLevel}/8) *
-        </label>
+        </Label>
         <input
           type="range"
           min="0"
           max="8"
           value={fuelLevel}
           onChange={(e) => setFuelLevel(parseInt(e.target.value, 10))}
-          className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-          style={{ background: "var(--color-border)" }}
+          className="w-full h-2 rounded-full appearance-none cursor-pointer bg-white/[0.08] accent-white"
         />
-        <div className="flex justify-between text-xs mt-1" style={{ color: "var(--color-text-muted)" }}>
+        <div className="flex justify-between text-[10px] font-medium uppercase tracking-wider text-[#71717a]">
           <span>Vide</span>
           <span>1/4</span>
           <span>1/2</span>
@@ -257,37 +255,33 @@ export function InspectionForm({ vehicles, bookings, onComplete, onCancel }: Ins
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
+      <div className="space-y-2">
+        <Label className="text-xs font-semibold text-[#a1a1aa]">
           Notes et observations
-        </label>
+        </Label>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="input min-h-[80px]"
+          className="flex min-h-[80px] w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-[#fafafa] shadow-xs transition-colors placeholder:text-[#71717a] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/20"
           placeholder="Rayures, remarques..."
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <div className="flex justify-between items-end mb-1">
-            <label className="block text-sm font-medium" style={{ color: "var(--color-text)" }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+        <div className="space-y-2">
+          <div className="flex justify-between items-end">
+            <Label className="text-xs font-semibold text-[#a1a1aa]">
               Signature Client
-            </label>
+            </Label>
             <button
               type="button"
               onClick={() => clearCanvas(clientCanvasRef)}
-              className="text-xs"
-              style={{ color: "var(--color-primary)" }}
+              className="text-[11px] text-[#3b82f6] hover:text-[#60a5fa] font-medium"
             >
               Effacer
             </button>
           </div>
-          <div
-            className="rounded-lg touch-none"
-            style={{ border: "1px solid var(--color-border)", background: "white" }}
-          >
+          <div className="rounded-xl border border-white/[0.12] bg-[#fafafa] overflow-hidden touch-none shadow-inner">
             <canvas
               ref={clientCanvasRef}
               width={400}
@@ -304,24 +298,20 @@ export function InspectionForm({ vehicles, bookings, onComplete, onCancel }: Ins
           </div>
         </div>
 
-        <div>
-          <div className="flex justify-between items-end mb-1">
-            <label className="block text-sm font-medium" style={{ color: "var(--color-text)" }}>
+        <div className="space-y-2">
+          <div className="flex justify-between items-end">
+            <Label className="text-xs font-semibold text-[#a1a1aa]">
               Signature Agent
-            </label>
+            </Label>
             <button
               type="button"
               onClick={() => clearCanvas(agentCanvasRef)}
-              className="text-xs"
-              style={{ color: "var(--color-primary)" }}
+              className="text-[11px] text-[#3b82f6] hover:text-[#60a5fa] font-medium"
             >
               Effacer
             </button>
           </div>
-          <div
-            className="rounded-lg touch-none"
-            style={{ border: "1px solid var(--color-border)", background: "white" }}
-          >
+          <div className="rounded-xl border border-white/[0.12] bg-[#fafafa] overflow-hidden touch-none shadow-inner">
             <canvas
               ref={agentCanvasRef}
               width={400}
@@ -339,17 +329,23 @@ export function InspectionForm({ vehicles, bookings, onComplete, onCancel }: Ins
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
-        <button type="button" onClick={onCancel} className="btn btn-ghost" disabled={isSubmitting}>
+      <div className="flex justify-end gap-3 pt-6 mt-4 border-t border-white/[0.08]">
+        <Button 
+          type="button" 
+          variant="ghost" 
+          onClick={onCancel} 
+          disabled={isSubmitting}
+          className="h-11 rounded-xl text-[#a1a1aa] hover:text-[#fafafa] hover:bg-white/[0.04]"
+        >
           Annuler
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="btn btn-primary"
+          className="bg-[#fafafa] hover:bg-white text-black font-semibold h-11 px-6 rounded-xl shadow-xs"
         >
           {isSubmitting ? "Enregistrement..." : isOnline ? "Enregistrer" : "Enregistrer hors ligne"}
-        </button>
+        </Button>
       </div>
     </form>
   );

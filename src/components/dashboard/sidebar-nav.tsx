@@ -11,9 +11,8 @@ import {
   FileText,
   Settings,
   ShieldAlert,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 interface SidebarNavProps {
   isSuperAdmin?: boolean;
@@ -27,57 +26,51 @@ export function SidebarNav({ isSuperAdmin, onNavigate }: SidebarNavProps) {
     {
       href: "/dashboard",
       label: "Tableau de bord",
-      labelAr: "لوحة القيادة",
       icon: LayoutDashboard,
       badge: null,
     },
     {
       href: "/dashboard/fleet",
       label: "Flotte de véhicules",
-      labelAr: "الأسطول",
       icon: Car,
       badge: null,
     },
     {
       href: "/dashboard/bookings",
       label: "Réservations",
-      labelAr: "الحجوزات",
       icon: CalendarDays,
       badge: null,
     },
     {
       href: "/dashboard/clients",
       label: "Clients & Conducteurs",
-      labelAr: "العملاء",
       icon: Users,
       badge: null,
     },
     {
       href: "/dashboard/inspections",
-      label: "États des lieux (PWA)",
-      labelAr: "المعاينات",
+      label: "États des lieux",
       icon: ClipboardCheck,
-      badge: "Offline",
+      badge: "PWA",
     },
     {
       href: "/dashboard/legal",
       label: "Infractions & CNDP",
-      labelAr: "القانونية",
       icon: FileText,
       badge: "DGSN",
     },
     {
       href: "/dashboard/settings",
-      label: "Configuration agence",
-      labelAr: "الإعدادات",
+      label: "Configuration",
       icon: Settings,
       badge: null,
     },
   ];
 
   return (
-    <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-      <div className="px-3 pb-2 text-[11px] font-semibold tracking-wider text-white/40 uppercase">
+    <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+      {/* Section Label */}
+      <div className="px-3 pb-3 pt-1 text-[11px] font-semibold tracking-[0.15em] text-[#4e4e56] uppercase">
         Menu Principal
       </div>
 
@@ -93,58 +86,61 @@ export function SidebarNav({ isSuperAdmin, onNavigate }: SidebarNavProps) {
             key={item.href}
             href={item.href}
             onClick={onNavigate}
-            className={`group relative flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
+            className={`group relative flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 active:scale-[0.98] ${
               isActive
-                ? "bg-[#0a84ff] text-white shadow-sm shadow-blue-500/30 font-semibold"
-                : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+                ? "bg-white/[0.08] text-[#fafafa] font-semibold"
+                : "text-[#a1a1aa] hover:text-[#fafafa] hover:bg-white/[0.04]"
             }`}
           >
-            <div className="flex items-center gap-3">
+            {/* Active Left Indicator */}
+            {isActive && (
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 rounded-r-full bg-[#3b82f6] shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
+            )}
+
+            <div className="flex items-center gap-3 pl-1">
               <Icon
-                className={`w-4 h-4 transition-transform duration-150 group-hover:scale-105 ${
-                  isActive ? "text-white" : "text-white/50 group-hover:text-white"
+                className={`w-[18px] h-[18px] transition-all duration-150 ${
+                  isActive
+                    ? "text-[#3b82f6]"
+                    : "text-[#71717a] group-hover:text-[#a1a1aa]"
                 }`}
+                strokeWidth={isActive ? 2 : 1.75}
               />
               <span>{item.label}</span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              {item.badge && (
-                <Badge
-                  variant={isActive ? "secondary" : "outline"}
-                  className={`text-[9px] px-1.5 py-0 h-4 border ${
-                    isActive
-                      ? "bg-white/20 text-white border-white/20"
-                      : "bg-white/[0.04] text-white/60 border-white/10"
-                  }`}
-                >
-                  {item.badge}
-                </Badge>
-              )}
-              {isActive && (
-                <div className="w-1.5 h-1.5 rounded-full bg-white/90" />
-              )}
-            </div>
+            {item.badge && (
+              <span
+                className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md leading-none ${
+                  isActive
+                    ? "bg-[#3b82f6]/15 text-[#3b82f6] border border-[#3b82f6]/20"
+                    : "bg-white/[0.04] text-[#71717a] border border-white/[0.06]"
+                }`}
+              >
+                {item.badge}
+              </span>
+            )}
           </Link>
         );
       })}
 
+      {/* Super Admin Section */}
       {isSuperAdmin && (
-        <div className="pt-4 mt-3 border-t border-white/[0.08]">
-          <div className="px-3 pb-2 text-[11px] font-semibold tracking-wider text-amber-400 uppercase flex items-center gap-1.5">
-            <ShieldAlert className="w-3.5 h-3.5" />
+        <div className="pt-4 mt-4 border-t border-white/[0.06]">
+          <div className="px-3 pb-3 text-[11px] font-semibold tracking-[0.15em] text-[#f59e0b]/60 uppercase flex items-center gap-1.5">
+            <ShieldAlert className="w-3 h-3" strokeWidth={2} />
             <span>Administration SaaS</span>
           </div>
           <Link
             href="/admin"
             onClick={onNavigate}
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 active:scale-[0.98]"
+            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all text-[#f59e0b] bg-[#f59e0b]/[0.06] hover:bg-[#f59e0b]/[0.10] border border-[#f59e0b]/15 active:scale-[0.98]"
           >
-            <div className="flex items-center gap-2.5">
-              <ShieldAlert className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center gap-3 pl-1">
+              <ShieldAlert className="w-[18px] h-[18px] text-[#f59e0b]" strokeWidth={1.75} />
               <span>Portail SuperAdmin</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-amber-400/60" />
+            <ChevronRight className="w-4 h-4 text-[#f59e0b]/40" />
           </Link>
         </div>
       )}

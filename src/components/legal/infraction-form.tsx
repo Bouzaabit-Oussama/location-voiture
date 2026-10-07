@@ -3,12 +3,11 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { createAndMapInfraction } from "@/app/actions/infractions";
-import { Scale, Loader2 } from "lucide-react";
+import { Scale, Loader2, Car, MapPin, Hash, CreditCard, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function InfractionForm({ 
   vehicles, 
@@ -53,134 +52,144 @@ export function InfractionForm({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <Card className="w-full max-w-lg bg-slate-950 border-slate-800 shadow-xl animate-in zoom-in-95 duration-200">
-        <CardHeader className="border-b border-slate-800 flex flex-row items-center gap-4 py-4">
-          <div className="bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
-            <Scale className="h-5 w-5 text-amber-500" />
-          </div>
-          <div>
-            <CardTitle className="text-slate-100 text-lg">Déclarer une Infraction</CardTitle>
-            <CardDescription className="text-slate-400">Saisie des données NARSA</CardDescription>
-          </div>
-        </CardHeader>
+    <Dialog open={true} onOpenChange={onClose}>
+      <DialogContent className="bg-[#131316] border border-white/[0.08] shadow-[0_2px_20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.02)] sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-4 border-b border-white/[0.08]">
+          <DialogTitle className="text-lg font-bold text-[#fafafa] flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+              <Scale className="w-4 h-4 text-amber-500" />
+            </div>
+            <div>
+              Déclarer une Infraction
+              <p className="text-[11px] font-normal text-[#a1a1aa] mt-0.5">Saisie des données NARSA et rattachement au contrat</p>
+            </div>
+          </DialogTitle>
+        </DialogHeader>
 
-        <form onSubmit={handleSubmit}>
-          <CardContent className="p-6 space-y-4">
-            {error && (
-              <div className="p-3 bg-red-500/10 text-red-400 text-sm rounded-lg border border-red-500/20">
-                {error}
-              </div>
-            )}
+        <div className="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar">
+          {error && (
+            <div className="mb-6 p-4 rounded-xl text-sm bg-[#ef4444]/10 border border-[#ef4444]/20 text-[#ef4444] font-medium flex items-center gap-2">
+              <span className="shrink-0">⚠️</span> {error}
+            </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="vehicle_id" className="text-slate-300">Véhicule concerné *</Label>
-                <Select name="vehicle_id" required>
-                  <SelectTrigger className="bg-slate-900 border-slate-800 text-slate-100">
-                    <SelectValue placeholder="Sélectionner..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
+                <Label htmlFor="vehicle_id" className="text-xs font-semibold text-[#a1a1aa]">Véhicule concerné *</Label>
+                <div className="relative">
+                  <Car className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                  <select name="vehicle_id" id="vehicle_id" className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 pl-10 pr-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none" required>
+                    <option value="" className="bg-[#131316]">Sélectionner...</option>
                     {vehicles.map(v => (
-                      <SelectItem key={v.id} value={v.id} className="text-slate-100 focus:bg-slate-800 focus:text-slate-50">
+                      <option key={v.id} value={v.id} className="bg-[#131316]">
                         {v.plate_number} ({v.brand} {v.model})
-                      </SelectItem>
+                      </option>
                     ))}
-                  </SelectContent>
-                </Select>
+                  </select>
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="infraction_type" className="text-slate-300">Type d'infraction *</Label>
-                <Select name="infraction_type" required>
-                  <SelectTrigger className="bg-slate-900 border-slate-800 text-slate-100">
-                    <SelectValue placeholder="Sélectionner..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-slate-800">
-                    <SelectItem value="speeding" className="text-slate-100 focus:bg-slate-800">Excès de Vitesse (Radar)</SelectItem>
-                    <SelectItem value="red_light" className="text-slate-100 focus:bg-slate-800">Franchissement Feu Rouge</SelectItem>
-                    <SelectItem value="parking" className="text-slate-100 focus:bg-slate-800">Stationnement Interdit</SelectItem>
-                    <SelectItem value="accident" className="text-slate-100 focus:bg-slate-800">Accident / Fuite</SelectItem>
-                    <SelectItem value="other" className="text-slate-100 focus:bg-slate-800">Autre</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="infraction_type" className="text-xs font-semibold text-[#a1a1aa]">Type d'infraction *</Label>
+                <select name="infraction_type" id="infraction_type" className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none" required>
+                  <option value="" className="bg-[#131316]">Sélectionner...</option>
+                  <option value="speeding" className="bg-[#131316]">Excès de Vitesse (Radar)</option>
+                  <option value="red_light" className="bg-[#131316]">Franchissement Feu Rouge</option>
+                  <option value="parking" className="bg-[#131316]">Stationnement Interdit</option>
+                  <option value="accident" className="bg-[#131316]">Accident / Fuite</option>
+                  <option value="other" className="bg-[#131316]">Autre</option>
+                </select>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="infraction_date" className="text-slate-300">Date et Heure exactes *</Label>
-                <Input 
-                  type="datetime-local" 
-                  id="infraction_date"
-                  name="infraction_date"
-                  required
-                  max={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
-                  className="bg-slate-900 border-slate-800 text-slate-100 [color-scheme:dark]"
-                />
+                <Label htmlFor="infraction_date" className="text-xs font-semibold text-[#a1a1aa]">Date et Heure exactes *</Label>
+                <div className="relative">
+                  <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                  <Input 
+                    type="datetime-local" 
+                    id="infraction_date"
+                    name="infraction_date"
+                    required
+                    max={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
+                    className="pl-10 [color-scheme:dark]"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="amount_mad" className="text-slate-300">Montant (MAD) *</Label>
-                <Input 
-                  type="number" 
-                  id="amount_mad"
-                  name="amount_mad"
-                  required
-                  min="0"
-                  step="50"
-                  placeholder="Ex: 300"
-                  className="bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-500"
-                />
+                <Label htmlFor="amount_mad" className="text-xs font-semibold text-[#a1a1aa]">Montant (MAD) *</Label>
+                <div className="relative">
+                  <CreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                  <Input 
+                    type="number" 
+                    id="amount_mad"
+                    name="amount_mad"
+                    required
+                    min="0"
+                    step="50"
+                    placeholder="Ex: 300"
+                    className="pl-10"
+                  />
+                </div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="location" className="text-slate-300">Lieu de l'infraction *</Label>
-              <Input 
-                type="text" 
-                id="location"
-                name="location"
-                required
-                placeholder="Ex: Autoroute A3, PK 15 vers Casablanca"
-                className="bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-500"
-              />
+              <Label htmlFor="location" className="text-xs font-semibold text-[#a1a1aa]">Lieu de l'infraction *</Label>
+              <div className="relative">
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                <Input 
+                  type="text" 
+                  id="location"
+                  name="location"
+                  required
+                  placeholder="Ex: Autoroute A3, PK 15 vers Casablanca"
+                  className="pl-10"
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="radar_reference" className="text-slate-300">N° Appareil Radar (Optionnel)</Label>
-              <Input 
-                type="text" 
-                id="radar_reference"
-                name="radar_reference"
-                placeholder="Ex: FIXE-A3-15"
-                className="bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-500"
-              />
-              <p className="text-xs text-slate-500">Permet un suivi précis des radars NARSA.</p>
+            <div className="space-y-2 pb-2">
+              <Label htmlFor="radar_reference" className="text-xs font-semibold text-[#a1a1aa]">N° Appareil Radar (Optionnel)</Label>
+              <div className="relative">
+                <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                <Input 
+                  type="text" 
+                  id="radar_reference"
+                  name="radar_reference"
+                  placeholder="Ex: FIXE-A3-15"
+                  className="pl-10"
+                />
+              </div>
+              <p className="text-[10px] text-[#71717a] ml-1 mt-1">Permet un suivi précis des radars NARSA.</p>
             </div>
-          </CardContent>
 
-          <CardFooter className="px-6 py-4 border-t border-slate-800 flex justify-end gap-3 bg-slate-900/50">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              disabled={loading}
-              className="bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-slate-100"
-            >
-              Annuler
-            </Button>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="bg-blue-600 hover:bg-blue-500 text-white"
-            >
-              {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              {loading ? 'Recherche Contrat...' : 'Enregistrer & Relier'}
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 pt-6 pb-2 border-t border-white/[0.08] sticky bottom-0 bg-[#131316]">
+              <Button 
+                type="button" 
+                variant="ghost" 
+                onClick={onClose} 
+                disabled={loading}
+                className="h-11 rounded-xl text-[#a1a1aa] hover:text-[#fafafa] hover:bg-white/[0.04]"
+              >
+                Annuler
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold h-11 px-6 rounded-xl shadow-xs"
+              >
+                {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                {loading ? 'Recherche Contrat...' : 'Enregistrer & Relier'}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

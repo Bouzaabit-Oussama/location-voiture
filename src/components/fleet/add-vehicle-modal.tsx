@@ -1,7 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { addVehicle, type FleetActionState } from "@/app/actions/fleet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { CheckCircle2, Car, Calendar, CreditCard, Hash } from "lucide-react";
 
 const initialState: FleetActionState = {};
 
@@ -29,231 +34,173 @@ interface AddVehicleModalProps {
 export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
   const [state, formAction, isPending] = useActionState(addVehicle, initialState);
 
-  if (!isOpen) return null;
-
   if (state.success) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.5)" }}>
-        <div className="card animate-fade-in text-center" style={{ padding: "2rem", maxWidth: "400px" }}>
-          <div className="text-5xl mb-4">✅</div>
-          <h2 className="text-lg font-bold mb-2" style={{ color: "var(--color-text)" }}>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="bg-[#131316] border border-white/[0.08] shadow-[0_2px_20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.02)] p-8 max-w-sm text-center">
+          <div className="w-16 h-16 bg-[#22c55e]/10 text-[#22c55e] rounded-full flex items-center justify-center mx-auto mb-5 shadow-[0_0_30px_rgba(34,197,94,0.2)]">
+            <CheckCircle2 className="w-8 h-8" strokeWidth={2} />
+          </div>
+          <DialogTitle className="text-xl font-bold text-[#fafafa] mb-2">
             Véhicule ajouté !
-          </h2>
-          <p className="text-sm mb-4" style={{ color: "var(--color-text-muted)" }}>
-            Le véhicule a été ajouté à votre flotte.
+          </DialogTitle>
+          <p className="text-sm text-[#a1a1aa] mb-6">
+            Le véhicule a été ajouté à votre flotte et est prêt à être loué.
           </p>
-          <button onClick={onClose} className="btn btn-primary">
+          <Button 
+            onClick={onClose} 
+            className="w-full bg-[#fafafa] hover:bg-white text-black font-semibold rounded-xl h-11"
+          >
             Fermer
-          </button>
-        </div>
-      </div>
+          </Button>
+        </DialogContent>
+      </Dialog>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.5)" }}>
-      <div
-        className="card animate-fade-in w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-        style={{ padding: "2rem" }}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold" style={{ color: "var(--color-text)" }}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-[#131316] border border-white/[0.08] shadow-[0_2px_20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.02)] sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-4 border-b border-white/[0.08]">
+          <DialogTitle className="text-lg font-bold text-[#fafafa] flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+              <Car className="w-4 h-4 text-[#fafafa]" />
+            </div>
             Ajouter un véhicule
-          </h2>
-          <button onClick={onClose} className="btn btn-ghost" aria-label="Fermer">
-            ✕
-          </button>
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar">
+          {state.error && (
+            <div className="mb-6 p-4 rounded-xl text-sm bg-[#ef4444]/10 border border-[#ef4444]/20 text-[#ef4444] font-medium flex items-center gap-2">
+              <span className="shrink-0">⚠️</span> {state.error}
+            </div>
+          )}
+
+          <form action={formAction} className="space-y-6">
+            {/* Row 1: Plate + Brand + Model */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="plate_number" className="text-xs font-semibold text-[#a1a1aa]">Immatriculation *</Label>
+                <div className="relative">
+                  <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                  <Input id="plate_number" name="plate_number" type="text" placeholder="12345-A-67" className="pl-10 bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="brand" className="text-xs font-semibold text-[#a1a1aa]">Marque *</Label>
+                <select id="brand" name="brand" className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none" required>
+                  <option value="" className="bg-[#131316]">Choisir...</option>
+                  {BRANDS.map((b) => (
+                    <option key={b} value={b} className="bg-[#131316]">{b}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="model" className="text-xs font-semibold text-[#a1a1aa]">Modèle *</Label>
+                <Input id="model" name="model" type="text" placeholder="Ex: Logan" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" required />
+              </div>
+            </div>
+
+            {/* Row 2: Year + Category + Color */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="year" className="text-xs font-semibold text-[#a1a1aa]">Année *</Label>
+                <div className="relative">
+                  <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                  <Input id="year" name="year" type="number" min={new Date().getFullYear() - 5} max={new Date().getFullYear() + 1} placeholder={String(new Date().getFullYear())} className="pl-10 bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" required />
+                </div>
+                <p className="text-[10px] text-[#71717a]">Max 5 ans (Ministère du Transport)</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-xs font-semibold text-[#a1a1aa]">Catégorie</Label>
+                <select id="category" name="category" className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none">
+                  {CATEGORIES.map((c) => (
+                    <option key={c.value} value={c.value} className="bg-[#131316]">{c.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="color" className="text-xs font-semibold text-[#a1a1aa]">Couleur</Label>
+                <Input id="color" name="color" type="text" placeholder="Blanc" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+            </div>
+
+            {/* Row 3: Fuel + Transmission + Seats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="fuel_type" className="text-xs font-semibold text-[#a1a1aa]">Carburant</Label>
+                <select id="fuel_type" name="fuel_type" className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none">
+                  <option value="diesel" className="bg-[#131316]">Diesel</option>
+                  <option value="gasoline" className="bg-[#131316]">Essence</option>
+                  <option value="hybrid" className="bg-[#131316]">Hybride</option>
+                  <option value="electric" className="bg-[#131316]">Électrique</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="transmission" className="text-xs font-semibold text-[#a1a1aa]">Transmission</Label>
+                <select id="transmission" name="transmission" className="w-full bg-white/[0.03] border border-white/[0.08] text-[#fafafa] rounded-xl h-11 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none">
+                  <option value="manual" className="bg-[#131316]">Manuelle</option>
+                  <option value="automatic" className="bg-[#131316]">Automatique</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="seats" className="text-xs font-semibold text-[#a1a1aa]">Places</Label>
+                <Input id="seats" name="seats" type="number" min={2} max={9} defaultValue={5} className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+            </div>
+
+            {/* Row 4: Daily Rate + Mileage + VIN */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="daily_rate_mad" className="text-xs font-semibold text-[#a1a1aa]">Tarif journalier (MAD) *</Label>
+                <div className="relative">
+                  <CreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717a]" />
+                  <Input id="daily_rate_mad" name="daily_rate_mad" type="number" min={0} step={10} placeholder="250" className="pl-10 bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="mileage_km" className="text-xs font-semibold text-[#a1a1aa]">Kilométrage</Label>
+                <Input id="mileage_km" name="mileage_km" type="number" min={0} placeholder="0" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vin" className="text-xs font-semibold text-[#a1a1aa]">VIN / Châssis</Label>
+                <Input id="vin" name="vin" type="text" placeholder="Optionnel" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+            </div>
+
+            {/* Row 5: Document Expiries */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-2 border-t border-white/[0.04]">
+              <div className="space-y-2 mt-2">
+                <Label htmlFor="insurance_expiry" className="text-xs font-semibold text-[#a1a1aa]">Expiration Assurance</Label>
+                <Input id="insurance_expiry" name="insurance_expiry" type="date" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+              <div className="space-y-2 mt-2">
+                <Label htmlFor="technical_visit_expiry" className="text-xs font-semibold text-[#a1a1aa]">Expiration Visite Tech.</Label>
+                <Input id="technical_visit_expiry" name="technical_visit_expiry" type="date" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+              <div className="space-y-2 mt-2">
+                <Label htmlFor="vignette_expiry" className="text-xs font-semibold text-[#a1a1aa]">Expiration Vignette</Label>
+                <Input id="vignette_expiry" name="vignette_expiry" type="date" className="bg-white/[0.03] border-white/[0.08] text-[#fafafa] rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-white/20" />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 pt-6 pb-2 border-t border-white/[0.08] sticky bottom-0 bg-[#131316]">
+              <Button type="button" variant="ghost" onClick={onClose} className="h-11 rounded-xl text-[#a1a1aa] hover:text-[#fafafa] hover:bg-white/[0.04]">
+                Annuler
+              </Button>
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="bg-[#fafafa] hover:bg-white text-black font-semibold h-11 px-6 rounded-xl shadow-xs"
+              >
+                {isPending ? "Ajout..." : "Ajouter le véhicule"}
+              </Button>
+            </div>
+          </form>
         </div>
-
-        {state.error && (
-          <div
-            className="mb-4 p-3 rounded-lg text-sm"
-            style={{ background: "var(--color-danger)", color: "white" }}
-          >
-            {state.error}
-          </div>
-        )}
-
-        <form action={formAction} className="space-y-4">
-          {/* Row 1: Plate + Brand + Model */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label htmlFor="plate_number" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Immatriculation *
-              </label>
-              <input
-                id="plate_number"
-                name="plate_number"
-                type="text"
-                placeholder="12345-A-67"
-                className="input"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="brand" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Marque *
-              </label>
-              <select id="brand" name="brand" className="input" required>
-                <option value="">Choisir...</option>
-                {BRANDS.map((b) => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="model" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Modèle *
-              </label>
-              <input id="model" name="model" type="text" placeholder="Logan" className="input" required />
-            </div>
-          </div>
-
-          {/* Row 2: Year + Category + Color */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label htmlFor="year" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Année *
-              </label>
-              <input
-                id="year"
-                name="year"
-                type="number"
-                min={new Date().getFullYear() - 5}
-                max={new Date().getFullYear() + 1}
-                placeholder={String(new Date().getFullYear())}
-                className="input"
-                required
-              />
-              <p className="text-xs mt-1" style={{ color: "var(--color-text-muted)" }}>
-                Max 5 ans (Ministère du Transport)
-              </p>
-            </div>
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Catégorie
-              </label>
-              <select id="category" name="category" className="input">
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="color" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Couleur
-              </label>
-              <input id="color" name="color" type="text" placeholder="Blanc" className="input" />
-            </div>
-          </div>
-
-          {/* Row 3: Fuel + Transmission + Seats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label htmlFor="fuel_type" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Carburant
-              </label>
-              <select id="fuel_type" name="fuel_type" className="input">
-                <option value="diesel">Diesel</option>
-                <option value="gasoline">Essence</option>
-                <option value="hybrid">Hybride</option>
-                <option value="electric">Électrique</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="transmission" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Transmission
-              </label>
-              <select id="transmission" name="transmission" className="input">
-                <option value="manual">Manuelle</option>
-                <option value="automatic">Automatique</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="seats" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Places
-              </label>
-              <input id="seats" name="seats" type="number" min={2} max={9} defaultValue={5} className="input" />
-            </div>
-          </div>
-
-          {/* Row 4: Daily Rate + Mileage + VIN */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label htmlFor="daily_rate_mad" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Tarif journalier (MAD) *
-              </label>
-              <input
-                id="daily_rate_mad"
-                name="daily_rate_mad"
-                type="number"
-                min={0}
-                step={10}
-                placeholder="250"
-                className="input"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="mileage_km" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Kilométrage
-              </label>
-              <input id="mileage_km" name="mileage_km" type="number" min={0} placeholder="0" className="input" />
-            </div>
-            <div>
-              <label htmlFor="vin" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                VIN / Châssis
-              </label>
-              <input id="vin" name="vin" type="text" placeholder="Optionnel" className="input" />
-            </div>
-          </div>
-
-          {/* Row 5: Document Expiries */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label htmlFor="insurance_expiry" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Assurance expire le
-              </label>
-              <input id="insurance_expiry" name="insurance_expiry" type="date" className="input" />
-            </div>
-            <div>
-              <label htmlFor="technical_visit_expiry" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Visite technique expire le
-              </label>
-              <input id="technical_visit_expiry" name="technical_visit_expiry" type="date" className="input" />
-            </div>
-            <div>
-              <label htmlFor="vignette_expiry" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-                Vignette expire le
-              </label>
-              <input id="vignette_expiry" name="vignette_expiry" type="date" className="input" />
-            </div>
-          </div>
-
-          {/* GPS Device */}
-          <div>
-            <label htmlFor="gps_device_imei" className="block text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>
-              IMEI GPS (Teltonika)
-            </label>
-            <input id="gps_device_imei" name="gps_device_imei" type="text" placeholder="Optionnel — pour le suivi IoT" className="input" />
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
-            <button type="button" onClick={onClose} className="btn btn-ghost">
-              Annuler
-            </button>
-            <button
-              type="submit"
-              disabled={isPending}
-              className="btn btn-primary"
-              style={{ opacity: isPending ? 0.7 : 1 }}
-            >
-              {isPending ? "Ajout en cours..." : "Ajouter le véhicule"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

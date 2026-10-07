@@ -31,24 +31,24 @@ export default async function DashboardLayout({
 
   return (
     <TenantProvider initialTenant={tenant} initialProfile={profile}>
-      <div className="flex h-screen overflow-hidden bg-black text-white antialiased selection:bg-[#0a84ff]/30 selection:text-white">
-        {/* Left Fixed Apple Sidebar (Desktop) */}
-        <aside className="w-64 shrink-0 hidden lg:flex flex-col h-full bg-[#121214] border-r border-white/[0.08] z-10">
-          {/* Logo Brand Header */}
-          <div className="h-16 px-5 border-b border-white/[0.08] flex items-center justify-between">
+      <div className="flex h-screen overflow-hidden bg-[#09090b] text-[#fafafa] antialiased selection:bg-blue-500/30 selection:text-white">
+        {/* ─── Sidebar (Desktop) ─── */}
+        <aside className="w-[260px] shrink-0 hidden lg:flex flex-col h-full border-r border-white/[0.06] z-10 bg-[#0c0c0e]">
+          {/* Brand Header */}
+          <div className="h-16 px-5 border-b border-white/[0.06] flex items-center">
             <Link href="/dashboard" className="flex items-center gap-3 group">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-xs bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-sm group-hover:scale-105 transition-transform duration-200">
+              <div className="w-8 h-8 rounded-[10px] flex items-center justify-center text-white font-bold text-xs bg-gradient-to-br from-blue-500 to-blue-600 shadow-[0_2px_8px_rgba(59,130,246,0.3)] group-hover:shadow-[0_2px_12px_rgba(59,130,246,0.4)] transition-shadow duration-200">
                 LV
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-white tracking-tight leading-none">
-                  Location<span className="text-amber-400">Voiture</span>
+                <span className="text-sm font-semibold text-[#fafafa] tracking-tight leading-none">
+                  Location<span className="text-blue-400">Voiture</span>
                 </span>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] text-white/40 font-mono tracking-wider">
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span className="text-[10px] text-[#71717a] font-mono">
                     v{APP_VERSION}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded-full font-semibold bg-[#30d158]/10 text-[#30d158] border border-[#30d158]/20">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium bg-[#22c55e]/10 text-[#22c55e] border border-[#22c55e]/20 leading-none">
                     Maroc
                   </span>
                 </div>
@@ -56,38 +56,38 @@ export default async function DashboardLayout({
             </Link>
           </div>
 
-          {/* Navigation Links */}
-          <div className="flex-1 overflow-y-auto">
+          {/* Navigation */}
+          <div className="flex-1 overflow-y-auto py-2">
             <SidebarNav isSuperAdmin={tenant?.is_superadmin} />
           </div>
 
-          {/* Bottom Agency & Profile Bar */}
-          <div className="p-3 border-t border-white/[0.08] space-y-2 bg-black/40">
+          {/* Bottom Panel */}
+          <div className="p-3 border-t border-white/[0.06] space-y-2">
             {/* Agency Badge */}
-            <div className="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-between">
+            <div className="px-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
               <div className="min-w-0 pr-2">
-                <p className="text-xs font-semibold text-white truncate flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-[#0a84ff] shrink-0" />
+                <p className="text-xs font-medium text-[#fafafa] truncate flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-[#3b82f6] shrink-0" strokeWidth={1.75} />
                   <span className="truncate">{tenant?.name || "Mon Agence"}</span>
                 </p>
-                <p className="text-[11px] text-white/40 truncate mt-0.5">
+                <p className="text-[11px] text-[#71717a] truncate mt-0.5 pl-5">
                   {tenant?.city || "Maroc"} • Plan Pro
                 </p>
               </div>
-              <div className="w-2 h-2 rounded-full bg-[#30d158] shrink-0" title="En ligne" />
+              <div className="w-2 h-2 rounded-full bg-[#22c55e] shrink-0 shadow-[0_0_6px_rgba(34,197,94,0.4)]" title="En ligne" />
             </div>
 
-            {/* User row */}
-            <div className="flex items-center justify-between px-2 py-1">
+            {/* User Row */}
+            <div className="flex items-center justify-between px-2 py-1.5">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm shrink-0">
                   {userInitials}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-white truncate">
+                  <p className="text-xs font-medium text-[#fafafa] truncate">
                     {profile.full_name}
                   </p>
-                  <p className="text-[10px] text-white/40 capitalize truncate">
+                  <p className="text-[10px] text-[#71717a] capitalize truncate">
                     {profile.role === "admin" ? "Administrateur" : profile.role}
                   </p>
                 </div>
@@ -97,7 +97,7 @@ export default async function DashboardLayout({
           </div>
         </aside>
 
-        {/* Right Main Content Column */}
+        {/* ─── Main Content Area ─── */}
         <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
           <TopBar
             user={{
@@ -113,9 +113,9 @@ export default async function DashboardLayout({
             }}
           />
 
-          {/* Scrollable Viewport */}
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-black">
-            <div className="max-w-7xl mx-auto w-full">
+          {/* Content Viewport */}
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#09090b]">
+            <div className="max-w-[1400px] mx-auto w-full">
               {children}
             </div>
           </main>
