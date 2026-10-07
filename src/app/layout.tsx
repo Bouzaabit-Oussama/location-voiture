@@ -33,10 +33,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
-  ],
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -45,8 +42,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" dir="ltr" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
-      <body className="min-h-screen antialiased">
+    <html lang="fr" dir="ltr" suppressHydrationWarning className={cn("dark font-sans", geist.variable)}>
+      <body className="min-h-screen bg-black text-white antialiased selection:bg-blue-500/30 selection:text-blue-200">
         {children}
         <script
           dangerouslySetInnerHTML={{

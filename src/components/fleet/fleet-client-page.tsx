@@ -5,7 +5,6 @@ import { AddVehicleModal } from "@/components/fleet/add-vehicle-modal";
 import { formatMAD } from "@/lib/utils";
 import type { Vehicle } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus, CarFront, Wrench, CalendarClock, ShieldAlert, CheckCircle2, AlertTriangle, XCircle, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,12 +18,12 @@ interface FleetClientPageProps {
   };
 }
 
-const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType }> = {
-  available: { label: "Disponible", icon: CheckCircle2 },
-  rented: { label: "En location", icon: CarFront },
-  maintenance: { label: "Maintenance", icon: Wrench },
-  reserved: { label: "Réservé", icon: CalendarClock },
-  decommissioned: { label: "Retiré", icon: XCircle },
+const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; badgeClass: string }> = {
+  available: { label: "Disponible", icon: CheckCircle2, badgeClass: "bg-[#30d158]/15 text-[#30d158] border-[#30d158]/25" },
+  rented: { label: "En location", icon: CarFront, badgeClass: "bg-[#0a84ff]/15 text-[#0a84ff] border-[#0a84ff]/25" },
+  maintenance: { label: "Maintenance", icon: Wrench, badgeClass: "bg-[#ffd60a]/15 text-[#ffd60a] border-[#ffd60a]/25" },
+  reserved: { label: "Réservé", icon: CalendarClock, badgeClass: "bg-[#5e5ce6]/15 text-[#5e5ce6] border-[#5e5ce6]/25" },
+  decommissioned: { label: "Retiré", icon: XCircle, badgeClass: "bg-[#ff453a]/15 text-[#ff453a] border-[#ff453a]/25" },
 };
 
 export function FleetClientPage({ initialVehicles, compliance }: FleetClientPageProps) {
@@ -45,110 +44,119 @@ export function FleetClientPage({ initialVehicles, compliance }: FleetClientPage
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-100">Flotte de véhicules</h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">Flotte de véhicules</h1>
+          <p className="text-xs sm:text-sm text-white/50 mt-1">
             {compliance.total} véhicule{compliance.total !== 1 ? "s" : ""} enregistré{compliance.total !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button onClick={() => setShowAddModal(true)} className="bg-blue-600 hover:bg-blue-500 text-white shadow-sm">
-          <Plus className="w-4 h-4 mr-2" />
+        <Button
+          onClick={() => setShowAddModal(true)}
+          className="bg-[#0a84ff] hover:bg-[#0071e3] text-white rounded-xl shadow-xs active:scale-[0.98] transition-all"
+        >
+          <Plus className="w-4 h-4 mr-1.5" />
           Ajouter un véhicule
         </Button>
       </div>
 
       {/* Compliance Alert */}
       {!compliance.compliant && compliance.issues.length > 0 && (
-        <Card className="bg-amber-500/10 border-amber-500/20 shadow-none">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <ShieldAlert className="w-5 h-5 text-amber-500 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-semibold text-amber-500 mb-1">
-                  Alertes de conformité Ministère du Transport
-                </h3>
-                <ul className="space-y-1">
-                  {compliance.issues.map((issue, i) => (
-                    <li key={i} className="text-sm text-amber-500/80">
-                      • {issue}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        <div className="p-4 rounded-2xl bg-[#ffd60a]/10 border border-[#ffd60a]/20">
+          <div className="flex items-start gap-3">
+            <ShieldAlert className="w-5 h-5 text-[#ffd60a] shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-sm font-semibold text-[#ffd60a] mb-1">
+                Alertes de conformité Ministère du Transport
+              </h3>
+              <ul className="space-y-1">
+                {compliance.issues.map((issue, i) => (
+                  <li key={i} className="text-xs text-[#ffd60a]/90">
+                    • {issue}
+                  </li>
+                ))}
+              </ul>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
-      {/* Filters and Search */}
+      {/* Filters and Search Bar */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-        <div className="flex flex-wrap gap-2">
+        {/* Apple Segmented Control */}
+        <div className="flex flex-wrap gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-md">
           {[
             { value: "all", label: "Tous" },
             { value: "available", label: "Disponibles" },
             { value: "rented", label: "En location" },
             { value: "maintenance", label: "Maintenance" },
             { value: "reserved", label: "Réservés" },
-          ].map((tab) => (
-            <Button
-              key={tab.value}
-              variant={filter === tab.value ? "default" : "outline"}
-              size="sm"
-              onClick={() => setFilter(tab.value)}
-              className={filter === tab.value ? "bg-slate-100 text-slate-900 hover:bg-slate-200" : "bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-900"}
-            >
-              {tab.label}
-              <Badge 
-                variant="secondary" 
-                className={`ml-2 h-4 px-1 py-0 text-[10px] ${filter === tab.value ? "bg-slate-300/50 text-slate-900" : "bg-slate-800 text-slate-400"}`}
+          ].map((tab) => {
+            const count = tab.value === "all" ? vehicles.length : vehicles.filter((v) => v.status === tab.value).length;
+            const isActive = filter === tab.value;
+            return (
+              <button
+                key={tab.value}
+                onClick={() => setFilter(tab.value)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all active:scale-95 ${
+                  isActive
+                    ? "bg-white text-black font-semibold shadow-xs"
+                    : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                }`}
               >
-                {tab.value === "all" ? vehicles.length : vehicles.filter((v) => v.status === tab.value).length}
-              </Badge>
-            </Button>
-          ))}
+                <span>{tab.label}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  isActive ? "bg-black/10 text-black font-bold" : "bg-white/10 text-white/50"
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
-        
-        <div className="relative w-full md:w-64">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input 
+
+        {/* Search input */}
+        <div className="relative w-full md:w-72">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+          <Input
             type="text"
-            placeholder="Rechercher (mat, modèle)..."
+            placeholder="Rechercher marque, matricule..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-9 bg-slate-950 border-slate-800 text-sm focus-visible:ring-1 focus-visible:ring-blue-500/50 w-full"
+            className="pl-9 h-9 bg-white/[0.05] border-white/10 text-white placeholder:text-white/35 rounded-xl text-xs focus-visible:ring-2 focus-visible:ring-[#0a84ff]/50 focus-visible:border-[#0a84ff] w-full"
           />
         </div>
       </div>
 
       {/* Vehicle Grid */}
       {filtered.length === 0 ? (
-        <Card className="bg-slate-900/50 border-slate-800 border-dashed">
-          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center mb-4">
-              <CarFront className="w-8 h-8 text-slate-400" />
-            </div>
-            <h3 className="text-lg font-medium text-slate-200 mb-2">
-              {vehicles.length === 0
-                ? "Aucun véhicule enregistré"
-                : "Aucun véhicule trouvé"}
-            </h3>
-            <p className="text-sm text-slate-400 max-w-sm mb-6">
-              {vehicles.length === 0
-                ? "Ajoutez vos véhicules pour commencer. Minimum 7 requis par le Ministère du Transport."
-                : "Essayez de modifier vos filtres ou votre recherche."}
-            </p>
-            {vehicles.length === 0 && (
-              <Button onClick={() => setShowAddModal(true)} className="bg-blue-600 hover:bg-blue-500 text-white">
-                Ajouter votre premier véhicule
-              </Button>
-            )}
-          </CardContent>
-        </Card>
+        <div className="rounded-3xl bg-[#1c1c1e] border border-white/[0.08] border-dashed p-12 text-center">
+          <div className="w-14 h-14 bg-white/[0.04] rounded-2xl flex items-center justify-center mx-auto mb-4 text-white/40">
+            <CarFront className="w-7 h-7" />
+          </div>
+          <h3 className="text-base font-semibold text-white mb-1">
+            {vehicles.length === 0
+              ? "Aucun véhicule enregistré"
+              : "Aucun résultat trouvé"}
+          </h3>
+          <p className="text-xs text-white/40 max-w-sm mx-auto mb-5">
+            {vehicles.length === 0
+              ? "Ajoutez vos véhicules pour commencer l'exploitation. Règle des 5 ans max au Maroc."
+              : "Modifiez vos filtres pour afficher vos véhicules."}
+          </p>
+          {vehicles.length === 0 && (
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className="bg-[#0a84ff] hover:bg-[#0071e3] text-white rounded-xl text-xs active:scale-[0.98]"
+            >
+              Ajouter votre premier véhicule
+            </Button>
+          )}
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
           {filtered.map((vehicle) => {
             const statusInfo = STATUS_CONFIG[vehicle.status] || STATUS_CONFIG.available;
             const StatusIcon = statusInfo.icon;
@@ -166,92 +174,86 @@ export function FleetClientPage({ initialVehicles, compliance }: FleetClientPage
             };
 
             const getDocBadgeStyle = (dateStr: string | null) => {
-              if (isExpired(dateStr)) return "bg-red-500/10 text-red-500 border-red-500/20";
-              if (isExpiringSoon(dateStr)) return "bg-amber-500/10 text-amber-500 border-amber-500/20";
-              return "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
+              if (isExpired(dateStr)) return "bg-[#ff453a]/15 text-[#ff453a] border-[#ff453a]/25";
+              if (isExpiringSoon(dateStr)) return "bg-[#ffd60a]/15 text-[#ffd60a] border-[#ffd60a]/25";
+              return "bg-[#30d158]/15 text-[#30d158] border-[#30d158]/25";
             };
 
             return (
-              <Card key={vehicle.id} className="bg-slate-950 border-slate-800 shadow-sm hover:shadow-md hover:border-slate-700 transition-all group overflow-hidden flex flex-col">
-                <CardHeader className="p-4 pb-2 space-y-0 relative">
-                  <div className="flex items-start justify-between">
-                    <Badge variant="outline" className="font-mono text-sm px-2 py-0.5 bg-slate-900 border-slate-700 text-slate-200">
+              <div
+                key={vehicle.id}
+                className="rounded-2xl bg-[#1c1c1e] border border-white/[0.08] shadow-sm hover:border-white/20 transition-all duration-200 group flex flex-col justify-between overflow-hidden"
+              >
+                {/* Card Top */}
+                <div className="p-5 pb-3">
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="font-mono text-xs px-2.5 py-1 bg-white/[0.06] border border-white/10 rounded-lg text-white font-semibold tracking-wider">
                       {vehicle.plate_number}
-                    </Badge>
+                    </span>
                     
-                    <Badge 
-                      variant="outline" 
-                      className={`flex items-center gap-1 px-2 py-0.5 text-xs font-medium border-0
-                        ${vehicle.status === 'available' ? 'bg-emerald-500/10 text-emerald-500' : ''}
-                        ${vehicle.status === 'rented' ? 'bg-blue-500/10 text-blue-400' : ''}
-                        ${vehicle.status === 'maintenance' ? 'bg-amber-500/10 text-amber-500' : ''}
-                        ${vehicle.status === 'reserved' ? 'bg-indigo-500/10 text-indigo-400' : ''}
-                        ${vehicle.status === 'decommissioned' ? 'bg-red-500/10 text-red-500' : ''}
-                      `}
-                    >
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${statusInfo.badgeClass}`}>
                       <StatusIcon className="w-3 h-3" />
                       {statusInfo.label}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-4 pt-2 flex-1">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-bold text-slate-100 truncate group-hover:text-blue-400 transition-colors">
-                      {vehicle.brand} {vehicle.model}
-                    </h3>
-                    <p className="text-sm text-slate-400 mt-1 flex items-center gap-2">
-                      <span>{vehicle.year}</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-700" />
-                      <span>{vehicle.fuel_type === "diesel" ? "Diesel" : vehicle.fuel_type === "gasoline" ? "Essence" : vehicle.fuel_type}</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-700" />
-                      <span>{vehicle.transmission === "manual" ? "Manuelle" : "Auto"}</span>
-                    </p>
+                    </span>
                   </div>
 
-                  <div className="flex items-end justify-between mb-4">
+                  <h3 className="text-base font-bold text-white truncate group-hover:text-[#0a84ff] transition-colors">
+                    {vehicle.brand} {vehicle.model}
+                  </h3>
+                  <p className="text-xs text-white/40 mt-1 flex items-center gap-2">
+                    <span>{vehicle.year}</span>
+                    <span className="w-1 h-1 rounded-full bg-white/20" />
+                    <span>{vehicle.fuel_type === "diesel" ? "Diesel" : vehicle.fuel_type === "gasoline" ? "Essence" : vehicle.fuel_type}</span>
+                    <span className="w-1 h-1 rounded-full bg-white/20" />
+                    <span>{vehicle.transmission === "manual" ? "Manuelle" : "Auto"}</span>
+                  </p>
+
+                  <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-baseline justify-between">
                     <div>
-                      <span className="text-2xl font-black text-slate-100">
+                      <span className="text-xl font-bold tracking-tight text-white">
                         {formatMAD(vehicle.daily_rate_mad).replace('MAD', '').trim()}
                       </span>
-                      <span className="text-xs text-slate-500 ml-1 font-medium">MAD / j</span>
+                      <span className="text-[11px] text-white/40 ml-1 font-medium">MAD / jour</span>
                     </div>
                   </div>
 
                   {/* Document Status */}
-                  <div className="space-y-2 mt-auto">
+                  <div className="space-y-1.5 mt-4 pt-3 border-t border-white/[0.06]">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-slate-400">Assurance</span>
-                      <Badge variant="outline" className={`h-4 text-[10px] px-1.5 ${getDocBadgeStyle(vehicle.insurance_expiry)}`}>
+                      <span className="text-white/40 text-[11px]">Assurance</span>
+                      <span className={`text-[10px] px-2 py-0.2 rounded-full border ${getDocBadgeStyle(vehicle.insurance_expiry)}`}>
                         {isExpired(vehicle.insurance_expiry) ? 'Expirée' : isExpiringSoon(vehicle.insurance_expiry) ? 'Bientôt' : 'À jour'}
-                      </Badge>
+                      </span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-slate-400">Visite technique</span>
-                      <Badge variant="outline" className={`h-4 text-[10px] px-1.5 ${getDocBadgeStyle(vehicle.technical_visit_expiry)}`}>
+                      <span className="text-white/40 text-[11px]">Visite technique</span>
+                      <span className={`text-[10px] px-2 py-0.2 rounded-full border ${getDocBadgeStyle(vehicle.technical_visit_expiry)}`}>
                         {isExpired(vehicle.technical_visit_expiry) ? 'Expirée' : isExpiringSoon(vehicle.technical_visit_expiry) ? 'Bientôt' : 'À jour'}
-                      </Badge>
+                      </span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-slate-400">Vignette</span>
-                      <Badge variant="outline" className={`h-4 text-[10px] px-1.5 ${getDocBadgeStyle(vehicle.vignette_expiry)}`}>
+                      <span className="text-white/40 text-[11px]">Vignette</span>
+                      <span className={`text-[10px] px-2 py-0.2 rounded-full border ${getDocBadgeStyle(vehicle.vignette_expiry)}`}>
                         {isExpired(vehicle.vignette_expiry) ? 'Expirée' : isExpiringSoon(vehicle.vignette_expiry) ? 'Bientôt' : 'À jour'}
-                      </Badge>
+                      </span>
                     </div>
                   </div>
-                </CardContent>
-                <CardFooter className="p-3 bg-slate-900/50 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-                  <div className="flex items-center gap-1.5">
-                    <CarFront className="w-3.5 h-3.5" />
+                </div>
+
+                {/* Card Bottom / Footer */}
+                <div className="px-5 py-3 bg-black/30 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/40">
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <CarFront className="w-3.5 h-3.5 text-white/50" />
                     {vehicle.mileage_km.toLocaleString("fr-MA")} km
                   </div>
                   {vehicle.gps_device_imei && (
-                    <div className="flex items-center gap-1.5 text-emerald-500">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="flex items-center gap-1.5 text-[#30d158]">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse" />
                       GPS
                     </div>
                   )}
-                </CardFooter>
-              </Card>
+                </div>
+              </div>
             );
           })}
         </div>

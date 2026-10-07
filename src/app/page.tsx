@@ -1,71 +1,96 @@
 import Link from "next/link";
 import { APP_VERSION } from "@/lib/version";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Car, CalendarCheck2, Smartphone, FileText, ShieldCheck, BarChart3 } from "lucide-react";
+import {
+  ArrowRight,
+  Car,
+  CalendarCheck2,
+  Smartphone,
+  FileText,
+  ShieldCheck,
+  BarChart3,
+  ChevronRight,
+  ShieldAlert
+} from "lucide-react";
 
 export default function HomePage() {
   const features = [
     {
       icon: Car,
-      title: "Gestion de flotte",
-      description: "Suivi en temps réel, visite technique, assurance et vignette. Conformité Ministère du Transport.",
+      tag: "Flotte",
+      title: "Gestion de flotte intelligente",
+      description: "Suivi en temps réel, visites techniques, alertes assurances et vignettes. Règle stricte des 5 ans (Ministère du Transport).",
     },
     {
       icon: CalendarCheck2,
-      title: "Réservations intelligentes",
-      description: "Moteur anti double-réservation. Tarifs saisonniers automatiques pour la période MRE.",
+      tag: "Réservations",
+      title: "Contrats & Tarifs dynamiques",
+      description: "Moteur anti double-réservation, acompte, franchise et gestion des saisons MRE en Dirham Marocain (MAD).",
     },
     {
       icon: Smartphone,
-      title: "Inspection hors ligne",
-      description: "Application PWA fonctionnant sans internet. Synchronisation automatique au retour en ligne.",
+      tag: "Terrain PWA",
+      title: "États des lieux hors ligne",
+      description: "Inspection tactile avec marquage des rayures et signature numérique directe sur tablette ou smartphone.",
     },
     {
       icon: FileText,
-      title: "Contrats en arabe",
-      description: "Génération PDF bilingue (FR/AR) avec mise en page BiDi conforme DGSN.",
+      tag: "Légal & DGSN",
+      title: "Fiches de Police & BiDi FR/AR",
+      description: "Export instantané des fiches de renseignements touristiques pour la DGSN et contrats bilingues conformes.",
     },
     {
       icon: ShieldCheck,
-      title: "Conformité CNDP",
-      description: "Protection des données personnelles conforme à la Loi 09-08. Hachage SHA-256 des CIN.",
+      tag: "CNDP Loi 09-08",
+      title: "Sécurité & Hachage CIN",
+      description: "Chiffrement et hachage SHA-256 des pièces d'identité garantissant la stricte conformité aux données personnelles.",
     },
     {
       icon: BarChart3,
-      title: "Tableau de bord SaaS",
-      description: "Multi-agence, facturation ICE/IF/RC, réseau de mauvais payeurs décentralisé.",
+      tag: "Radar & NARSA",
+      title: "Contentieux Infractions",
+      description: "Attribution automatique des radars aux locataires et génération immédiate des lettres de décharge NARSA.",
     },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50 selection:bg-blue-500/30">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+    <div className="min-h-screen flex flex-col bg-black text-white antialiased selection:bg-[#0a84ff]/30 selection:text-white">
+      {/* Apple Frosted Navigation Bar */}
+      <nav className="sticky top-0 z-50 bg-black/75 backdrop-blur-2xl border-b border-white/[0.08] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/20 border border-blue-500/20">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm group-hover:scale-105 transition-transform duration-200">
                 LV
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold leading-tight tracking-tight">
-                  Location<span className="text-blue-500">Voiture</span>
+                <span className="text-sm font-semibold tracking-tight text-white">
+                  Location<span className="text-amber-400">Voiture</span>
                 </span>
-                <span className="text-[10px] text-slate-500 font-mono tracking-wider -mt-1 uppercase">v{APP_VERSION}</span>
+                <span className="text-[10px] text-white/40 font-mono -mt-0.5">v{APP_VERSION}</span>
               </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link href="/login">
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  Se connecter
-                </Button>
+            </Link>
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                href="/login"
+                className={buttonVariants({
+                  variant: "ghost",
+                  size: "sm",
+                  className: "text-white/70 hover:text-white hover:bg-white/10 rounded-full px-4 text-xs font-medium active:scale-95 transition-all",
+                })}
+              >
+                Se connecter
               </Link>
-              <Link href="/register">
-                <Button className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20">
-                  Essai gratuit
-                </Button>
+              <Link
+                href="/register"
+                className={buttonVariants({
+                  size: "sm",
+                  className: "bg-[#0a84ff] hover:bg-[#0071e3] text-white rounded-full px-4 text-xs font-medium shadow-sm active:scale-95 transition-all",
+                })}
+              >
+                Essai gratuit
               </Link>
             </div>
           </div>
@@ -74,54 +99,65 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative overflow-hidden py-24 sm:py-32 flex flex-col items-center text-center">
-          {/* Background effects */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[300px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none" />
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <Badge variant="outline" className="border-blue-500/30 bg-blue-500/10 text-blue-400 mb-8 py-1.5 px-4 rounded-full gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-              🇲🇦 Conçu pour le marché marocain
-            </Badge>
-            
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 max-w-4xl mx-auto">
-              Gérez votre flotte de <br className="hidden sm:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
-                location de voitures
-              </span>
+        <section className="relative overflow-hidden pt-20 pb-24 sm:pt-32 sm:pb-36 flex flex-col items-center text-center px-4 sm:px-6 lg:px-8">
+          {/* Subtle Cupertino Radial Backlight */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[900px] h-[350px] bg-[#0a84ff]/15 blur-[140px] rounded-full pointer-events-none" />
+
+          <div className="max-w-5xl mx-auto relative z-10 space-y-6">
+            {/* Pill Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 text-xs font-medium text-white/80 backdrop-blur-xl">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse" />
+              <span>Conforme Réglementation Ministère du Transport & CNDP</span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white max-w-4xl mx-auto leading-[1.1]">
+              L'excellence logicielle pour la location de véhicules au Maroc.
             </h1>
-            
-            <p className="text-lg sm:text-xl mb-12 text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Réservations, inspections, contrats et conformité CNDP — tout en une seule plateforme.
-              Fonctionne hors ligne. Prêt pour la saison MRE.
+
+            {/* Subtitle */}
+            <p className="text-base sm:text-xl text-white/60 max-w-2xl mx-auto font-normal leading-relaxed pt-2">
+              Flotte, contrats, fiches de police DGSN, états des lieux tactiles et contentieux NARSA. Une expérience unifiée conçue avec la rigueur d'Apple.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/register">
-                <Button size="lg" className="h-14 px-8 text-lg bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-500/20 group w-full sm:w-auto">
-                  Commencer gratuitement
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-6">
+              <Link
+                href="/register"
+                className={buttonVariants({
+                  size: "lg",
+                  className: "h-12 px-7 text-sm font-semibold bg-[#0a84ff] hover:bg-[#0071e3] text-white rounded-full shadow-lg shadow-blue-500/25 active:scale-95 transition-all w-full sm:w-auto inline-flex items-center justify-center",
+                })}
+              >
+                Démarrer l'essai agence
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              <Link href="#features">
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-300 w-full sm:w-auto">
-                  Découvrir les fonctionnalités
-                </Button>
+              <Link
+                href="#features"
+                className={buttonVariants({
+                  size: "lg",
+                  variant: "outline",
+                  className: "h-12 px-7 text-sm font-semibold bg-white/[0.04] hover:bg-white/[0.08] text-white border-white/10 rounded-full active:scale-95 transition-all w-full sm:w-auto",
+                })}
+              >
+                Découvrir la suite
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Features Grid */}
-        <section id="features" className="py-24 bg-slate-900/50 border-y border-slate-800 relative z-10">
+        {/* Feature Grid with Apple Cards */}
+        <section id="features" className="py-20 sm:py-28 bg-[#0a0a0c] border-t border-white/[0.08] relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-slate-100">
-                Tout ce dont vous avez besoin
+            <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20 space-y-3">
+              <p className="text-xs font-semibold text-[#0a84ff] uppercase tracking-wider">
+                Fonctionnalités Métier
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                Tout ce que le métier exige, sans compromis.
               </h2>
-              <p className="text-lg text-slate-400">
-                Une plateforme complète pour les agences de location au Maroc
+              <p className="text-sm sm:text-base text-white/60">
+                Chaque module est pensé pour la productivité immédiate des gérants et agents de comptoir.
               </p>
             </div>
 
@@ -129,71 +165,70 @@ export default function HomePage() {
               {features.map((feature, i) => {
                 const Icon = feature.icon;
                 return (
-                  <Card key={i} className="bg-slate-950 border-slate-800 hover:border-slate-700 hover:bg-slate-900/80 transition-all duration-300 group">
-                    <CardContent className="p-8">
-                      <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all">
-                        <Icon className="h-6 w-6 text-blue-400" />
+                  <div
+                    key={i}
+                    className="p-7 rounded-3xl bg-[#1c1c1e] border border-white/[0.08] hover:border-white/20 transition-all duration-200 group flex flex-col justify-between shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="w-11 h-11 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-[#0a84ff] group-hover:scale-105 transition-transform duration-200">
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <span className="text-[11px] font-medium text-white/40 px-2.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.06]">
+                          {feature.tag}
+                        </span>
                       </div>
-                      <h3 className="text-xl font-semibold mb-3 text-slate-200">
+                      <h3 className="text-lg font-semibold text-white mb-2 tracking-tight">
                         {feature.title}
                       </h3>
-                      <p className="text-slate-400 leading-relaxed">
+                      <p className="text-sm text-white/60 leading-relaxed font-normal">
                         {feature.description}
                       </p>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 );
               })}
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-24 relative z-10">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <Card className="bg-gradient-to-br from-blue-600 to-indigo-700 border-none shadow-2xl shadow-blue-900/20">
-              <CardContent className="p-12 sm:p-16">
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-                  Prêt à digitaliser votre agence ?
-                </h2>
-                <p className="text-blue-100 mb-10 max-w-xl mx-auto text-lg">
-                  Rejoignez les agences de location marocaines qui font confiance à Location Voiture.
-                  Aucune carte de crédit requise.
-                </p>
-                <Link href="/register">
-                  <Button size="lg" className="h-14 px-8 text-lg bg-white text-blue-900 hover:bg-slate-100 font-bold w-full sm:w-auto">
-                    Démarrer maintenant — C'est gratuit
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+        {/* Apple Showcase Card Banner */}
+        <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+          <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-b from-[#1c1c1e] to-[#121214] border border-white/10 text-center relative overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 bg-radial-gradient from-blue-500/10 to-transparent pointer-events-none" />
+            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4 tracking-tight">
+              Rejoignez les agences modernes au Maroc
+            </h2>
+            <p className="text-sm sm:text-base text-white/60 max-w-xl mx-auto mb-8">
+              Démarrez en quelques secondes. Aucune carte bancaire requise. Accès complet au tableau de bord.
+            </p>
+            <Link
+              href="/register"
+              className={buttonVariants({
+                size: "lg",
+                className: "h-12 px-8 text-sm font-semibold bg-white text-black hover:bg-white/90 rounded-full shadow-lg active:scale-95 transition-all inline-flex items-center",
+              })}
+            >
+              Créer mon compte agence
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Link>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-12 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
-                LV
-              </div>
-              <p className="text-sm text-slate-500">
-                © 2026 Location Voiture. Tous droits réservés.
-              </p>
+      {/* Apple Footer */}
+      <footer className="border-t border-white/[0.08] bg-black py-10 px-4 sm:px-6 lg:px-8 text-xs text-white/40">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-[10px]">
+              LV
             </div>
-            <div className="flex gap-8">
-              <a href="#" className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
-                Politique de confidentialité
-              </a>
-              <a href="#" className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
-                Conditions d'utilisation
-              </a>
-              <a href="#" className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
-                Contact
-              </a>
-            </div>
+            <span>© 2026 Location Voiture Maroc. Conforme CNDP & Transport Marocain.</span>
+          </div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-white transition-colors">Conditions Générales</a>
+            <a href="#" className="hover:text-white transition-colors">Confidentialité</a>
+            <a href="#" className="hover:text-white transition-colors">Support</a>
           </div>
         </div>
       </footer>

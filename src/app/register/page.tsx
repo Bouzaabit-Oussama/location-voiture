@@ -3,6 +3,10 @@
 import { useActionState } from "react";
 import { signUp, type AuthState } from "@/app/actions/auth";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ShieldCheck, MailCheck } from "lucide-react";
 
 const initialState: AuthState = {};
 
@@ -12,32 +16,27 @@ export default function RegisterPage() {
   // Success state — email confirmation sent
   if (state.success) {
     return (
-      <div
-        className="min-h-screen flex items-center justify-center p-4"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% -20%, rgba(30, 64, 175, 0.15), var(--color-bg))",
-        }}
-      >
-        <div className="w-full max-w-md animate-fade-in text-center">
-          <div className="card" style={{ padding: "3rem 2rem" }}>
-            <div className="text-5xl mb-4">📧</div>
-            <h1
-              className="text-xl font-bold mb-2"
-              style={{ color: "var(--color-text)" }}
-            >
-              Vérifiez votre email
+      <div className="min-h-screen flex items-center justify-center p-4 bg-black text-white antialiased selection:bg-[#0a84ff]/30 selection:text-white relative overflow-hidden">
+        <div className="w-full max-w-md relative z-10 animate-in fade-in duration-300 text-center">
+          <div className="p-8 sm:p-10 rounded-3xl bg-[#1c1c1e] border border-white/[0.08] shadow-2xl backdrop-blur-2xl space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#0a84ff]/15 flex items-center justify-center mx-auto text-[#0a84ff]">
+              <MailCheck className="w-7 h-7" />
+            </div>
+            <h1 className="text-xl font-bold tracking-tight text-white">
+              Vérifiez votre boîte email
             </h1>
-            <p
-              className="text-sm mb-6"
-              style={{ color: "var(--color-text-muted)" }}
-            >
+            <p className="text-xs text-white/50 max-w-sm mx-auto leading-relaxed">
               Un lien de confirmation a été envoyé à votre adresse email.
-              Cliquez dessus pour activer votre compte.
+              Cliquez dessus pour activer votre compte agence.
             </p>
-            <Link href="/login" className="btn btn-primary">
-              Retour à la connexion
-            </Link>
+            <div className="pt-4">
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center w-full h-10 bg-[#0a84ff] hover:bg-[#0071e3] text-white rounded-xl text-xs font-semibold active:scale-[0.98] transition-all"
+              >
+                Retour à la connexion
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -45,106 +44,79 @@ export default function RegisterPage() {
   }
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 60% at 50% -20%, rgba(30, 64, 175, 0.15), var(--color-bg))",
-      }}
-    >
-      <div className="w-full max-w-md animate-fade-in">
-        {/* Logo */}
+    <div className="min-h-screen flex items-center justify-center p-4 py-12 bg-black text-white antialiased selection:bg-[#0a84ff]/30 selection:text-white relative overflow-hidden">
+      {/* Cupertino Radial Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#0a84ff]/15 blur-[140px] rounded-full pointer-events-none" />
+
+      <div className="w-full max-w-lg relative z-10 animate-in fade-in duration-300">
+        {/* Apple ID Brand Header */}
         <div className="text-center mb-8">
-          <Link href="/">
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg mx-auto mb-4"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--color-primary), var(--color-accent))",
-              }}
-            >
+          <Link href="/" className="inline-block group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg mx-auto mb-4 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
               LV
             </div>
           </Link>
-          <h1
-            className="text-2xl font-bold"
-            style={{ color: "var(--color-text)" }}
-          >
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Créer votre agence
           </h1>
-          <p
-            className="text-sm mt-1"
-            style={{ color: "var(--color-text-muted)" }}
-          >
-            Inscrivez votre agence de location sur Location Voiture
+          <p className="text-xs text-white/50 mt-1">
+            Démarrez la gestion de votre flotte et de vos contrats au Maroc
           </p>
         </div>
 
-        {/* Registration Form */}
-        <div className="card" style={{ padding: "2rem" }}>
+        {/* Apple Card Container */}
+        <div className="p-7 sm:p-9 rounded-3xl bg-[#1c1c1e] border border-white/[0.08] shadow-2xl backdrop-blur-2xl space-y-5">
           {/* Error Alert */}
           {state.error && (
-            <div
-              className="mb-4 p-3 rounded-lg text-sm"
-              style={{
-                background: "var(--color-danger)",
-                color: "white",
-                opacity: 0.95,
-              }}
-            >
+            <div className="p-3 rounded-xl bg-[#ff453a]/15 border border-[#ff453a]/25 text-[#ff453a] text-xs">
               {state.error}
             </div>
           )}
 
           <form action={formAction} className="space-y-4">
-            <div>
-              <label
-                htmlFor="full_name"
-                className="block text-sm font-medium mb-1"
-                style={{ color: "var(--color-text)" }}
-              >
-                Votre nom complet
-              </label>
-              <input
-                id="full_name"
-                name="full_name"
-                type="text"
-                placeholder="Mohammed Alaoui"
-                className="input"
-                required
-                autoComplete="name"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="full_name" className="text-xs text-white/70">
+                  Votre nom complet
+                </Label>
+                <Input
+                  id="full_name"
+                  name="full_name"
+                  type="text"
+                  placeholder="Mohammed Alaoui"
+                  className="bg-white/[0.05] border-white/10 rounded-xl text-white placeholder:text-white/35 text-xs h-10"
+                  required
+                  autoComplete="name"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="agency_name" className="text-xs text-white/70">
+                  Nom de l'agence
+                </Label>
+                <Input
+                  id="agency_name"
+                  name="agency_name"
+                  type="text"
+                  placeholder="Ex: Atlas Car Rental"
+                  className="bg-white/[0.05] border-white/10 rounded-xl text-white placeholder:text-white/35 text-xs h-10"
+                  required
+                />
+              </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="agency_name"
-                className="block text-sm font-medium mb-1"
-                style={{ color: "var(--color-text)" }}
-              >
-                Nom de l&apos;agence
-              </label>
-              <input
-                id="agency_name"
-                name="agency_name"
-                type="text"
-                placeholder="Ex: Atlas Car Rental"
-                className="input"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="city"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text)" }}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="city" className="text-xs text-white/70">
+                  Ville principale
+                </Label>
+                <select
+                  id="city"
+                  name="city"
+                  className="w-full h-10 px-3 bg-[#242426] border border-white/10 rounded-xl text-white text-xs outline-none focus:ring-2 focus:ring-[#0a84ff]/50"
+                  required
                 >
-                  Ville
-                </label>
-                <select id="city" name="city" className="input" required>
-                  <option value="">Choisir...</option>
+                  <option value="">Sélectionnez...</option>
                   <option value="Casablanca">Casablanca</option>
                   <option value="Rabat">Rabat</option>
                   <option value="Marrakech">Marrakech</option>
@@ -157,113 +129,95 @@ export default function RegisterPage() {
                   <option value="Tétouan">Tétouan</option>
                 </select>
               </div>
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text)" }}
-                >
-                  Téléphone
-                </label>
-                <input
+
+              <div className="space-y-1.5">
+                <Label htmlFor="phone" className="text-xs text-white/70">
+                  Téléphone agence
+                </Label>
+                <Input
                   id="phone"
                   name="phone"
                   type="tel"
                   placeholder="+212 6XX XXX XXX"
-                  className="input"
+                  className="bg-white/[0.05] border-white/10 rounded-xl text-white placeholder:text-white/35 text-xs h-10"
                   required
                   autoComplete="tel"
                 />
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium mb-1"
-                style={{ color: "var(--color-text)" }}
-              >
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs text-white/70">
                 Email professionnel
-              </label>
-              <input
+              </Label>
+              <Input
                 id="email"
                 name="email"
                 type="email"
                 placeholder="contact@votre-agence.ma"
-                className="input"
+                className="bg-white/[0.05] border-white/10 rounded-xl text-white placeholder:text-white/35 text-xs h-10"
                 required
                 autoComplete="email"
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium mb-1"
-                style={{ color: "var(--color-text)" }}
-              >
-                Mot de passe
-              </label>
-              <input
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-xs text-white/70">
+                Mot de passe (8 car. min)
+              </Label>
+              <Input
                 id="password"
                 name="password"
                 type="password"
                 placeholder="Minimum 8 caractères"
-                className="input"
+                className="bg-white/[0.05] border-white/10 rounded-xl text-white placeholder:text-white/35 text-xs h-10"
                 required
                 minLength={8}
                 autoComplete="new-password"
               />
             </div>
 
-            <div className="flex items-start gap-2">
+            <div className="flex items-start gap-2.5 pt-1">
               <input
                 type="checkbox"
                 id="cndp_consent"
                 name="cndp_consent"
-                className="mt-1 rounded"
+                className="mt-0.5 rounded border-white/20 bg-white/10 text-[#0a84ff] focus:ring-[#0a84ff]"
                 required
               />
               <label
                 htmlFor="cndp_consent"
-                className="text-xs"
-                style={{ color: "var(--color-text-muted)" }}
+                className="text-[11px] text-white/50 leading-relaxed cursor-pointer"
               >
-                J&apos;accepte les conditions d&apos;utilisation et je consens
-                au traitement de mes données conformément à la Loi 09-08
-                relative à la protection des personnes physiques (CNDP).
+                J'accepte les conditions d'utilisation et je consens au traitement de mes données conformément à la Loi 09-08 (CNDP).
               </label>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={isPending}
-              className="btn btn-primary w-full"
-              style={{ padding: "0.75rem", opacity: isPending ? 0.7 : 1 }}
+              className="w-full h-10 bg-[#0a84ff] hover:bg-[#0071e3] text-white rounded-xl text-xs font-semibold shadow-sm active:scale-[0.98] transition-all mt-2"
             >
-              {isPending ? (
-                <span className="animate-pulse-gentle">Création en cours...</span>
-              ) : (
-                "Créer mon agence"
-              )}
-            </button>
+              {isPending ? "Création en cours..." : "Créer mon agence — Essai gratuit"}
+            </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p
-              className="text-sm"
-              style={{ color: "var(--color-text-muted)" }}
-            >
+          <div className="pt-2 text-center border-t border-white/[0.06]">
+            <p className="text-xs text-white/40">
               Déjà inscrit ?{" "}
               <Link
                 href="/login"
-                className="font-medium"
-                style={{ color: "var(--color-primary)" }}
+                className="text-[#0a84ff] font-medium hover:underline"
               >
                 Se connecter
               </Link>
             </p>
           </div>
+        </div>
+
+        <div className="flex items-center justify-center gap-1.5 text-center text-[11px] text-white/30 mt-6">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>Protection des données Loi 09-08 (CNDP) • Conforme Ministère du Transport</span>
         </div>
       </div>
     </div>

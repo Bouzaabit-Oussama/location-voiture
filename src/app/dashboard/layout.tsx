@@ -31,31 +31,24 @@ export default async function DashboardLayout({
 
   return (
     <TenantProvider initialTenant={tenant} initialProfile={profile}>
-      {/* 
-        Bulletproof Flex Layout:
-        - Parent has h-screen overflow-hidden.
-        - Sidebar is a normal flex child with w-64 shrink-0.
-        - Main content is flex-1 min-w-0 overflow-y-auto.
-        -> It is physically impossible for the sidebar to overlap the content.
-      */}
-      <div className="flex h-screen overflow-hidden bg-[#090D16] text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
-        {/* Left Fixed Sidebar */}
-        <aside className="w-64 shrink-0 hidden lg:flex flex-col h-full bg-[#0D121F] border-r border-slate-800/80 z-10">
+      <div className="flex h-screen overflow-hidden bg-black text-white antialiased selection:bg-[#0a84ff]/30 selection:text-white">
+        {/* Left Fixed Apple Sidebar (Desktop) */}
+        <aside className="w-64 shrink-0 hidden lg:flex flex-col h-full bg-[#121214] border-r border-white/[0.08] z-10">
           {/* Logo Brand Header */}
-          <div className="h-16 px-5 border-b border-slate-800/80 flex items-center justify-between">
+          <div className="h-16 px-5 border-b border-white/[0.08] flex items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-extrabold text-sm bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-xs bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-sm group-hover:scale-105 transition-transform duration-200">
                 LV
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-bold text-white tracking-tight leading-none">
+                <span className="text-sm font-bold text-white tracking-tight leading-none">
                   Location<span className="text-amber-400">Voiture</span>
                 </span>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] text-slate-400 font-mono tracking-wider">
+                  <span className="text-[10px] text-white/40 font-mono tracking-wider">
                     v{APP_VERSION}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded-full font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="text-[9px] px-1.5 py-0.2 rounded-full font-semibold bg-[#30d158]/10 text-[#30d158] border border-[#30d158]/20">
                     Maroc
                   </span>
                 </div>
@@ -69,32 +62,32 @@ export default async function DashboardLayout({
           </div>
 
           {/* Bottom Agency & Profile Bar */}
-          <div className="p-3 border-t border-slate-800/80 space-y-2 bg-[#090D16]/60">
+          <div className="p-3 border-t border-white/[0.08] space-y-2 bg-black/40">
             {/* Agency Badge */}
-            <div className="px-3 py-2 rounded-xl bg-slate-800/40 border border-slate-800 flex items-center justify-between">
+            <div className="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-between">
               <div className="min-w-0 pr-2">
-                <p className="text-xs font-bold text-slate-200 truncate flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                <p className="text-xs font-semibold text-white truncate flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-[#0a84ff] shrink-0" />
                   <span className="truncate">{tenant?.name || "Mon Agence"}</span>
                 </p>
-                <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                <p className="text-[11px] text-white/40 truncate mt-0.5">
                   {tenant?.city || "Maroc"} • Plan Pro
                 </p>
               </div>
-              <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" title="En ligne" />
+              <div className="w-2 h-2 rounded-full bg-[#30d158] shrink-0" title="En ligne" />
             </div>
 
             {/* User row */}
             <div className="flex items-center justify-between px-2 py-1">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-blue-600/30 border border-blue-500/30 flex items-center justify-center text-xs font-bold text-blue-300 shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0">
                   {userInitials}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-slate-200 truncate">
+                  <p className="text-xs font-medium text-white truncate">
                     {profile.full_name}
                   </p>
-                  <p className="text-[10px] text-slate-400 capitalize truncate">
+                  <p className="text-[10px] text-white/40 capitalize truncate">
                     {profile.role === "admin" ? "Administrateur" : profile.role}
                   </p>
                 </div>
@@ -121,7 +114,7 @@ export default async function DashboardLayout({
           />
 
           {/* Scrollable Viewport */}
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-black">
             <div className="max-w-7xl mx-auto w-full">
               {children}
             </div>
