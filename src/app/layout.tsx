@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: {
@@ -40,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" dir="ltr" suppressHydrationWarning>
+    <html lang="fr" dir="ltr" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <body className="min-h-screen antialiased">
         {children}
         <script
@@ -61,6 +66,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <Toaster theme="dark" />
       </body>
     </html>
   );

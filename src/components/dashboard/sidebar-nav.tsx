@@ -13,6 +13,7 @@ import {
   ShieldAlert,
   ChevronRight
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface SidebarNavProps {
   isSuperAdmin?: boolean;
@@ -107,15 +108,12 @@ export function SidebarNav({ isSuperAdmin }: SidebarNavProps) {
 
             <div className="flex items-center gap-1.5">
               {item.badge && (
-                <span
-                  className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                    isActive
-                      ? "bg-white/20 text-white"
-                      : "bg-slate-800 text-slate-400 border border-slate-700/60"
-                  }`}
+                <Badge
+                  variant={isActive ? "secondary" : "outline"}
+                  className={`text-[9px] px-1.5 py-0 h-4 ${isActive ? "bg-white/20 text-white hover:bg-white/20" : "text-slate-400 border-slate-700/60"}`}
                 >
                   {item.badge}
-                </span>
+                </Badge>
               )}
               {isActive && (
                 <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
